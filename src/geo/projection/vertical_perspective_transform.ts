@@ -306,6 +306,9 @@ export class VerticalPerspectiveTransform implements ITransform {
             clippingPlane: this._cachedClippingPlane as [number, number, number, number],
             projectionTransition: applyGlobeMatrix ? 1 : 0,
             fallbackMatrix: this._globeViewProjMatrix32f,
+            // Globe lighting - defaults (globe_transform overrides these)
+            globeLightDirection: [0, 0, 1],
+            globeLightIntensity: 0,
         };
     }
 

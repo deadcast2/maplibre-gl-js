@@ -44,6 +44,16 @@ export type ProjectionData = {
      * Uniform name: `u_projection_fallback_matrix`.
      */
     fallbackMatrix: mat4;
+    /**
+     * The direction of the light source for globe lighting, as a normalized 3D vector.
+     * Uniform name: `u_globe_light_direction`.
+     */
+    globeLightDirection: [number, number, number];
+    /**
+     * The intensity of globe lighting (0 = no lighting effect, 1 = full lighting).
+     * Uniform name: `u_globe_light_intensity`.
+     */
+    globeLightIntensity: number;
 };
 
 /**

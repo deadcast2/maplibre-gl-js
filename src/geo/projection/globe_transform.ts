@@ -289,12 +289,25 @@ export class GlobeTransform implements ITransform {
         const mercatorProjectionData = this._mercatorTransform.getProjectionData(params);
         const verticalPerspectiveProjectionData = this._verticalPerspectiveTransform.getProjectionData(params);
 
+        // Default light direction - coming from top-right (simulating sun)
+        // Normalized vector pointing from the light source toward the globe
+        const lightAzimuth = 45 * Math.PI / 180;  // 45 degrees from north
+        const lightAltitude = 45 * Math.PI / 180; // 45 degrees above horizon
+        const lightDirection: [number, number, number] = [
+            Math.sin(lightAzimuth) * Math.cos(lightAltitude),
+            Math.sin(lightAltitude),
+            Math.cos(lightAzimuth) * Math.cos(lightAltitude)
+        ];
+
         return {
             mainMatrix: this.isGlobeRendering ? verticalPerspectiveProjectionData.mainMatrix : mercatorProjectionData.mainMatrix,
             clippingPlane: verticalPerspectiveProjectionData.clippingPlane,
             tileMercatorCoords: verticalPerspectiveProjectionData.tileMercatorCoords,
             projectionTransition: params.applyGlobeMatrix ? this._globeness : 0,
             fallbackMatrix: mercatorProjectionData.fallbackMatrix,
+            // Globe lighting
+            globeLightDirection: lightDirection,
+            globeLightIntensity: params.applyGlobeMatrix ? 0.5 * this._globeness : 0, // Scale with globe transition
         };
     }
 

@@ -1,4 +1,4 @@
-import {Uniform1f, Uniform4f, type UniformLocations, UniformMatrix4f} from '../uniform_binding';
+import {Uniform1f, Uniform3f, Uniform4f, type UniformLocations, UniformMatrix4f} from '../uniform_binding';
 import {type Context} from '../../gl/context';
 // This next import is needed for the "@link" in the documentation to work properly.
 
@@ -10,6 +10,8 @@ export type ProjectionPreludeUniformsType = {
     'u_projection_clipping_plane': Uniform4f;
     'u_projection_transition': Uniform1f;
     'u_projection_fallback_matrix': UniformMatrix4f;
+    'u_globe_light_direction': Uniform3f;
+    'u_globe_light_intensity': Uniform1f;
 };
 
 export const projectionUniforms = (context: Context, locations: UniformLocations): ProjectionPreludeUniformsType => ({
@@ -18,6 +20,8 @@ export const projectionUniforms = (context: Context, locations: UniformLocations
     'u_projection_clipping_plane': new Uniform4f(context, locations.u_projection_clipping_plane),
     'u_projection_transition': new Uniform1f(context, locations.u_projection_transition),
     'u_projection_fallback_matrix': new UniformMatrix4f(context, locations.u_projection_fallback_matrix),
+    'u_globe_light_direction': new Uniform3f(context, locations.u_globe_light_direction),
+    'u_globe_light_intensity': new Uniform1f(context, locations.u_globe_light_intensity),
 });
 
 /**
@@ -29,4 +33,6 @@ export const projectionObjectToUniformMap: {[field in keyof ProjectionData]: key
     clippingPlane: 'u_projection_clipping_plane',
     projectionTransition: 'u_projection_transition',
     fallbackMatrix: 'u_projection_fallback_matrix',
+    globeLightDirection: 'u_globe_light_direction',
+    globeLightIntensity: 'u_globe_light_intensity',
 };

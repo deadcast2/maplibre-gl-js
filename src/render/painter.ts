@@ -256,6 +256,8 @@ export class Painter {
             clippingPlane: [0, 0, 0, 0],
             projectionTransition: 0.0,
             fallbackMatrix: matrix,
+            globeLightDirection: [0, 0, 1],
+            globeLightIntensity: 0,
         };
 
         // Note: we force a simple mercator projection for the shader, since we want to draw a fullscreen quad.

@@ -102,6 +102,8 @@ describe('drawFill', () => {
                     clippingPlane: [0, 0, 0, 0],
                     projectionTransition: 0.0,
                     fallbackMatrix: fallback,
+                    globeLightDirection: [0, 0, 1],
+                    globeLightIntensity: 0,
                 };
             },
         } as any as IReadonlyTransform;

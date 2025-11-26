@@ -5,6 +5,13 @@ uniform highp vec4 u_projection_clipping_plane;
 uniform highp float u_projection_transition;
 uniform mat4 u_projection_fallback_matrix;
 
+// Globe lighting uniforms
+uniform highp vec3 u_globe_light_direction;
+uniform highp float u_globe_light_intensity;
+
+// Output for globe lighting - the sphere normal (same as position on unit sphere)
+out highp vec3 v_globe_normal;
+
 vec3 globeRotateVector(vec3 vec, vec2 angles) {
     vec3 axisRight = vec3(vec.z, 0.0, -vec.x); // Equivalent to cross(vec3(0.0, 1.0, 0.0), vec)
     vec3 axisUp = cross(axisRight, vec);
@@ -129,12 +136,16 @@ vec4 interpolateProjectionFor3D(vec2 posInTile, vec3 spherePos, float elevation)
 // and **replaces Z** with a custom value that clips geometry
 // on the backfacing side of the planet.
 vec4 projectTile(vec2 posInTile) {
-    return interpolateProjection(posInTile, projectToSphere(posInTile), 0.0);
+    vec3 spherePos = projectToSphere(posInTile);
+    v_globe_normal = spherePos; // Normal on unit sphere = position
+    return interpolateProjection(posInTile, spherePos, 0.0);
 }
 
 // A variant that supports special pole vertices.
 vec4 projectTile(vec2 posInTile, vec2 rawPos) {
-    return interpolateProjection(posInTile, projectToSphere(posInTile, rawPos), 0.0);
+    vec3 spherePos = projectToSphere(posInTile, rawPos);
+    v_globe_normal = spherePos; // Normal on unit sphere = position
+    return interpolateProjection(posInTile, spherePos, 0.0);
 }
 
 // Uses elevation to compute final screenspace projection

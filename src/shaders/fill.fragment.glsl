@@ -5,7 +5,10 @@ void main() {
     #pragma mapbox: initialize highp vec4 color
     #pragma mapbox: initialize lowp float opacity
 
-    fragColor = color * opacity;
+    vec4 baseColor = color * opacity;
+
+    // Apply globe lighting
+    fragColor = applyGlobeLighting(baseColor);
 
 #ifdef OVERDRAW_INSPECTOR
     fragColor = vec4(1.0);

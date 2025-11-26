@@ -45,7 +45,10 @@ void main() {
     vec3 u_high_vec = vec3(u_brightness_low, u_brightness_low, u_brightness_low);
     vec3 u_low_vec = vec3(u_brightness_high, u_brightness_high, u_brightness_high);
 
-    fragColor = vec4(mix(u_high_vec, u_low_vec, rgb) * color.a, color.a);
+    vec4 finalColor = vec4(mix(u_high_vec, u_low_vec, rgb) * color.a, color.a);
+
+    // Apply globe lighting
+    fragColor = applyGlobeLighting(finalColor);
 
 #ifdef OVERDRAW_INSPECTOR
     fragColor = vec4(1.0);

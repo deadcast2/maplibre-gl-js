@@ -745,6 +745,9 @@ export class MercatorTransform implements ITransform {
             clippingPlane: [0, 0, 0, 0],
             projectionTransition: 0.0, // Range 0..1, where 0 is mercator, 1 is another projection, mostly globe.
             fallbackMatrix: mainMatrix,
+            // Globe lighting - default values (no effect in mercator mode)
+            globeLightDirection: [0, 0, 1],
+            globeLightIntensity: 0,
         };
     }
 
