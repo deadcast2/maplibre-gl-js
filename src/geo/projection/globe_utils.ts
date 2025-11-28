@@ -251,3 +251,41 @@ export function interpolateLngLatForGlobe(start: LngLat, deltaLng: number, delta
         );
     }
 }
+
+/**
+ * Calculates the real-time position of the sun and returns a normalized direction vector
+ * pointing from the Earth toward the sun. This is used for realistic globe lighting.
+ * @param date - Optional date to calculate sun position for. Defaults to current time.
+ * @returns A normalized 3D vector pointing toward the sun.
+ */
+export function getSunDirection(date: Date = new Date()): vec3 {
+    // Calculate day of year (1-365)
+    const start = new Date(date.getFullYear(), 0, 0);
+    const diff = date.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+
+    // Solar declination (latitude where sun is directly overhead)
+    // Approximation using sinusoidal model
+    // Ranges from -23.45° (winter solstice) to +23.45° (summer solstice)
+    const declination = -23.45 * Math.cos((360 / 365) * (dayOfYear + 10) * Math.PI / 180);
+
+    // Calculate the subsolar longitude based on UTC time
+    // The sun is at longitude 0° at 12:00 UTC, and moves 15° per hour westward
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const seconds = date.getUTCSeconds();
+    const timeInHours = hours + minutes / 60 + seconds / 3600;
+
+    // Subsolar longitude: 180° at midnight UTC, 0° at noon UTC
+    // The sun moves westward (negative longitude direction) as time progresses
+    const subsolarLongitude = (12 - timeInHours) * 15;
+
+    // Convert to radians
+    const latRad = declination * Math.PI / 180;
+    const lngRad = subsolarLongitude * Math.PI / 180;
+
+    // Convert to 3D vector pointing toward the sun
+    // This uses the same coordinate system as the globe
+    return angularCoordinatesRadiansToVector(lngRad, latRad);
+}

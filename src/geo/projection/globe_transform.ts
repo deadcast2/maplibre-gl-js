@@ -4,6 +4,7 @@ import {MercatorTransform} from './mercator_transform';
 import {VerticalPerspectiveTransform} from './vertical_perspective_transform';
 import {type LngLat, type LngLatLike,} from '../lng_lat';
 import {lerp} from '../../util/util';
+import {getSunDirection} from './globe_utils';
 import type {OverscaledTileID, UnwrappedTileID, CanonicalTileID} from '../../tile/tile_id';
 
 import type Point from '@mapbox/point-geometry';
@@ -289,15 +290,9 @@ export class GlobeTransform implements ITransform {
         const mercatorProjectionData = this._mercatorTransform.getProjectionData(params);
         const verticalPerspectiveProjectionData = this._verticalPerspectiveTransform.getProjectionData(params);
 
-        // Default light direction - coming from top-right (simulating sun)
-        // Normalized vector pointing from the light source toward the globe
-        const lightAzimuth = 45 * Math.PI / 180;  // 45 degrees from north
-        const lightAltitude = 45 * Math.PI / 180; // 45 degrees above horizon
-        const lightDirection: [number, number, number] = [
-            Math.sin(lightAzimuth) * Math.cos(lightAltitude),
-            Math.sin(lightAltitude),
-            Math.cos(lightAzimuth) * Math.cos(lightAltitude)
-        ];
+        // Calculate real-time sun position for realistic globe lighting
+        const sunDir = getSunDirection();
+        const lightDirection: [number, number, number] = [sunDir[0], sunDir[1], sunDir[2]];
 
         return {
             mainMatrix: this.isGlobeRendering ? verticalPerspectiveProjectionData.mainMatrix : mercatorProjectionData.mainMatrix,
