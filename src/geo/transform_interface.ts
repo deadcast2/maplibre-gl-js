@@ -230,6 +230,14 @@ interface ITransformMutators {
      * @param error - The error value.
      */
     setTransitionState(value: number, error: number): void;
+
+    /**
+     * Sets whether directional lighting is enabled for globe projection.
+     * When enabled, the globe has realistic day/night shading.
+     * When disabled, the globe is uniformly lit (full brightness).
+     * @param enabled - Whether directional lighting should be enabled.
+     */
+    setDirectionalLight(enabled: boolean): void;
 }
 
 /**

@@ -24,6 +24,7 @@ import type {CoveringTilesDetailsProvider} from './covering_tiles_details_provid
  */
 export class GlobeTransform implements ITransform {
     private _helper: TransformHelper;
+    private _directionalLightEnabled: boolean = true;
 
     //
     // Implementation of transform getters and setters
@@ -268,6 +269,7 @@ export class GlobeTransform implements ITransform {
         const clone = new GlobeTransform();
         clone._globeness = this._globeness;
         clone._globeLatitudeErrorCorrectionRadians = this._globeLatitudeErrorCorrectionRadians;
+        clone._directionalLightEnabled = this._directionalLightEnabled;
         clone.apply(this);
         return clone;
     }
@@ -300,10 +302,14 @@ export class GlobeTransform implements ITransform {
             tileMercatorCoords: verticalPerspectiveProjectionData.tileMercatorCoords,
             projectionTransition: params.applyGlobeMatrix ? this._globeness : 0,
             fallbackMatrix: mercatorProjectionData.fallbackMatrix,
-            // Globe lighting
+            // Globe lighting - when directional light is disabled, intensity is 0 (full ambient)
             globeLightDirection: lightDirection,
-            globeLightIntensity: params.applyGlobeMatrix ? 0.5 * this._globeness : 0, // Scale with globe transition
+            globeLightIntensity: params.applyGlobeMatrix && this._directionalLightEnabled ? 0.5 * this._globeness : 0,
         };
+    }
+
+    setDirectionalLight(enabled: boolean): void {
+        this._directionalLightEnabled = enabled;
     }
 
     public isLocationOccluded(location: LngLat): boolean {

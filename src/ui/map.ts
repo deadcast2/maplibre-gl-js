@@ -3751,4 +3751,24 @@ export class Map extends Camera {
         this.style.setProjection(projection);
         return this._update(true);
     }
+
+    /**
+     * Sets whether directional lighting is enabled for globe projection.
+     * When enabled, the globe has realistic day/night shading based on sun position.
+     * When disabled, the globe is uniformly lit (full brightness) for better visibility.
+     * @param enabled - Whether directional lighting should be enabled.
+     * @returns `this` for chaining.
+     * @example
+     * ```ts
+     * // Disable directional lighting for a fully bright globe
+     * map.setDirectionalLight(false);
+     *
+     * // Enable directional lighting for realistic shading
+     * map.setDirectionalLight(true);
+     * ```
+     */
+    setDirectionalLight(enabled: boolean) {
+        this.transform.setDirectionalLight(enabled);
+        return this._update(true);
+    }
 }

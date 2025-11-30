@@ -237,6 +237,9 @@ export class VerticalPerspectiveTransform implements ITransform {
     setTransitionState(_value: number): void {
         // Do nothing
     }
+    setDirectionalLight(_enabled: boolean): void {
+        // No-op - directional lighting is handled by GlobeTransform
+    }
     //
     // Implementation of globe transform
     //

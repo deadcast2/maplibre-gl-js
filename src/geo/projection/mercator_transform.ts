@@ -220,6 +220,9 @@ export class MercatorTransform implements ITransform {
     setTransitionState(_value: number, _error: number): void {
         // Do nothing
     }
+    setDirectionalLight(_enabled: boolean): void {
+        // No-op for mercator - directional lighting only applies to globe
+    }
     //
     // Implementation of mercator transform
     //
